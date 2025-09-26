@@ -1,0 +1,9 @@
+parameters:
+    level: max
+
+    paths:
+        - %currentWorkingDirectory%/app
+        - %currentWorkingDirectory%/config
+        - %currentWorkingDirectory%/database
+        - %currentWorkingDirectory%/tests
+        - %currentWorkingDirectory%/routes

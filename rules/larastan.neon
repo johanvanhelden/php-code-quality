@@ -1,0 +1,3 @@
+includes:
+    - %rootDir%/../../../vendor/larastan/larastan/extension.neon
+    - phpstan.neon
