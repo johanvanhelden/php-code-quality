@@ -53,11 +53,11 @@ use PhpCsFixer\Finder;
 
 $finder = Finder::create()
     ->in([
-        'app',
-        'config',
-        'database',
-        'routes',
-        'tests',
+        __DIR__ . '/app',
+        __DIR__ . '/config',
+        __DIR__ . '/database',
+        __DIR__ . '/routes',
+        __DIR__ . '/tests',
     ])
     ->name('*.php')
     ->notName('*.blade.php')
@@ -67,14 +67,14 @@ $finder = Finder::create()
 // Ignore Laravel's bootstrap/cache folder, but keep providers, app and any future files.
 $finder->append(
     Finder::create()
-        ->in('bootstrap')
+        ->in(__DIR__ . '/bootstrap')
         ->exclude('cache')
         ->name('*.php')
         ->notName('*.blade.php')
 );
 
 /** @var PhpCsFixer\Config $config */
-$config = include 'vendor/johanvanhelden/php-code-quality/rules/.php-cs-fixer.php';
+$config = include __DIR__ . '/vendor/johanvanhelden/php-code-quality/rules/.php-cs-fixer.php';
 
 return $config->setFinder($finder);
 ```
@@ -173,7 +173,7 @@ Example settings for Visual Studio Code:
 "phpsab.executablePathCS": "vendor/bin/phpcs",
 
 "php-cs-fixer.executablePath": "${workspaceFolder}/vendor/bin/php-cs-fixer",
-"php-cs-fixer.config": "${workspaceFolder}/.php-cs-fixer.php"
+"php-cs-fixer.config": ".php-cs-fixer.php",
 ```
 
 ## Local Development
