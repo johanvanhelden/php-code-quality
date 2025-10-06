@@ -38,7 +38,7 @@ stan:
 	$(DOCKER_PHP_EXEC) vendor/bin/phpstan analyse --memory-limit=2G --configuration=phpstan.neon -v
 
 cs:
-	$(DOCKER_PHP_EXEC) vendor/bin/phpcs --standard=phpcs.xml -p
+	$(DOCKER_PHP_EXEC) vendor/bin/phpcs --standard=phpcs.xml -ps --parallel=8
 
 cs-fix:
 	$(DOCKER_PHP_EXEC) vendor/bin/php-cs-fixer fix --diff --config=.php-cs-fixer.php

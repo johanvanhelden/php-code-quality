@@ -3,10 +3,16 @@
 declare(strict_types=1);
 
 use PhpCsFixer\Config;
-use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
+use PhpCsFixer\Runner\Parallel\ParallelConfig;
 
-return (new Config())
-    ->setParallelConfig(ParallelConfigFactory::detect())
+const PARALLEL_PROCESSES = 8;
+const PARALLEL_FILES_PER_PROCESS = 20;
+
+return new Config()
+    ->setParallelConfig(new ParallelConfig(
+        maxProcesses: PARALLEL_PROCESSES,
+        filesPerProcess: PARALLEL_FILES_PER_PROCESS,
+    ))
     ->setRiskyAllowed(true)
     ->setRules([
         '@PSR12' => true,
@@ -133,6 +139,9 @@ return (new Config())
         'trailing_comma_in_multiline'        => ['elements' => ['arrays']],
         'trim_array_spaces'                  => true,
         'type_declaration_spaces'            => ['elements' => ['function']],
+        'new_expression_parentheses'         => [
+            'use_parentheses' => false,
+        ],
         'void_return'                        => true,
         'whitespace_after_comma_in_array'    => true,
     ])
