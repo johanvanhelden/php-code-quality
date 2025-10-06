@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<ruleset name="Test PHPCS Configuration">
+    <arg name="report-width" value="80"/>
+    <arg name="report" value="full"/>
+    <arg name="extensions" value="php"/>
+    <arg name="encoding" value="utf-8"/>
+
+    <!-- Include the main ruleset -->
+    <rule ref="../rules/phpcs.xml" />
+</ruleset>

@@ -1,0 +1,6 @@
+includes:
+    - ../rules/phpstan.neon
+
+parameters:
+    paths:
+        - %currentWorkingDirectory%/tests

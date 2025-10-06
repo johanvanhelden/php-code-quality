@@ -10,8 +10,8 @@ const PARALLEL_FILES_PER_PROCESS = 20;
 
 return new Config()
     ->setParallelConfig(new ParallelConfig(
-        maxProcesses: PARALLEL_PROCESSES,
-        filesPerProcess: PARALLEL_FILES_PER_PROCESS,
+        PARALLEL_PROCESSES,
+        PARALLEL_FILES_PER_PROCESS,
     ))
     ->setRiskyAllowed(true)
     ->setRules([
@@ -142,7 +142,7 @@ return new Config()
         'new_expression_parentheses'         => [
             'use_parentheses' => false,
         ],
-        'void_return'                        => true,
-        'whitespace_after_comma_in_array'    => true,
+        'void_return'                     => true,
+        'whitespace_after_comma_in_array' => true,
     ])
     ->setLineEnding("\n");

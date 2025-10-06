@@ -28,6 +28,35 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
+    "scripts": {
+        "test:syntax:pass": "find tests/syntax/pass -name '*.php' -print0 | xargs -0 -n1 -P8 php -l",
+        "test:syntax:fail": "! find tests/syntax/fail -name '*.php' -print0 | xargs -0 -n1 -P8 php -l 2>&1",
+        "test:syntax": ["@test:syntax:pass", "@test:syntax:fail"],
+        "test:stan:pass": "phpstan analyse --memory-limit=2G --configuration=tests/phpstan.neon tests/phpstan/pass -v",
+        "test:stan:fail": "! phpstan analyse --memory-limit=2G --configuration=tests/phpstan.neon tests/phpstan/fail -v 2>&1",
+        "test:stan": ["@test:stan:pass", "@test:stan:fail"],
+        "test:cs:pass": "phpcs --standard=tests/phpcs.xml -ps tests/phpcs/pass",
+        "test:cs:fail": "! phpcs --standard=tests/phpcs.xml -ps tests/phpcs/fail 2>&1",
+        "test:cs": ["@test:cs:pass", "@test:cs:fail"],
+        "test:cs-fix:pass": "php-cs-fixer fix --dry-run --diff --config=tests/.php-cs-fixer.php --path-mode=intersection tests/php-cs-fixer/pass",
+        "test:cs-fix:fail": "bash -c 'output=$(php-cs-fixer fix --dry-run --diff --config=tests/.php-cs-fixer.php --path-mode=intersection tests/php-cs-fixer/fail 2>&1); echo \"$output\"; ! echo \"$output\" | grep -q \"Found 0 of\"'",
+        "test:cs-fix": ["@test:cs-fix:pass", "@test:cs-fix:fail"],
+        "test:config": [
+            "@test:config:syntax",
+            "@test:config:stan",
+            "@test:config:cs-fix"
+        ],
+        "test:config:syntax": "find tests rules -name '.php-cs-fixer.php' | xargs -n1 php -l",
+        "test:config:stan": "phpstan analyse --memory-limit=2G --configuration=tests/phpstan.neon tests/.php-cs-fixer.php rules/.php-cs-fixer.php",
+        "test:config:cs-fix": "php-cs-fixer fix --dry-run --diff --config=tests/.php-cs-fixer.php tests/.php-cs-fixer.php rules/.php-cs-fixer.php",
+        "test": [
+            "@test:config",
+            "@test:syntax",
+            "@test:stan",
+            "@test:cs",
+            "@test:cs-fix"
+        ]
+    },
     "minimum-stability": "stable",
     "prefer-stable": true
 }
