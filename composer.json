@@ -23,6 +23,11 @@
         "larastan/larastan": "^3.0",
         "squizlabs/php_codesniffer": "^4.0"
     },
+    "autoload": {
+        "psr-4": {
+            "JohanVanHelden\\PhpCodeQuality\\PHPStan\\": "rules/phpstan/"
+        }
+    },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",

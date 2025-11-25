@@ -1,5 +1,10 @@
+rules:
+    - JohanVanHelden\PhpCodeQuality\PHPStan\NoImplicitOperatorInQueryMethodRule
+
 parameters:
     level: max
+
+    checkMissingOverrideMethodAttribute: true
 
     paths:
         - %currentWorkingDirectory%/app
