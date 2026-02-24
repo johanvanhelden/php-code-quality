@@ -1,0 +1,31 @@
+<?php
+
+namespace Illuminate\Testing;
+
+class PendingCommand
+{
+    /**
+     * @param string $question
+     * @param string|bool|array<int, string> $answer
+     * @return $this
+     */
+    public function expectsQuestion($question, $answer): static {}
+
+    /**
+     * @param string $output
+     * @return $this
+     */
+    public function expectsOutput($output): static {}
+}
+
+namespace Illuminate\Foundation\Testing\Concerns;
+
+trait InteractsWithConsole
+{
+    /**
+     * @param string $command
+     * @param array<string, mixed> $parameters
+     * @return \Illuminate\Testing\PendingCommand
+     */
+    public function artisan($command, $parameters = []): \Illuminate\Testing\PendingCommand {}
+}

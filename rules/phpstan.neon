@@ -12,3 +12,6 @@ parameters:
         - %currentWorkingDirectory%/database
         - %currentWorkingDirectory%/tests
         - %currentWorkingDirectory%/routes
+
+    stubFiles:
+        - phpstan/stubs/PendingCommand.stub
