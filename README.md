@@ -116,6 +116,9 @@ return $config
         $root . '/public',
         $root . '/routes',
         $root . '/tests',
+    ])
+    ->withSkip([
+        $root . '/bootstrap/cache',
     ]);
 ```
 
