@@ -101,12 +101,15 @@ Create a `rector.php` file in the root of the project with the following content
 
 declare(strict_types=1);
 
+use Rector\Caching\ValueObject\Storage\FileCacheStorage;
+
 $root = __DIR__;
 
 /** @var \Rector\Configuration\RectorConfigBuilder $config */
 $config = include __DIR__ . '/vendor/johanvanhelden/php-code-quality/rules/rector.php';
 
 return $config
+    ->withCache('/tmp/.cache/rector', FileCacheStorage::class) // optional, speeds up repeated runs
     ->withPaths([
         $root . '/app',
         $root . '/bootstrap',

@@ -2,12 +2,15 @@
 
 declare(strict_types=1);
 
+use Rector\Caching\ValueObject\Storage\FileCacheStorage;
+
 $root = __DIR__;
 
 /** @var \Rector\Configuration\RectorConfigBuilder $config */
 $config = include __DIR__ . '/rules/rector.php';
 
 return $config
+    ->withCache('/tmp/.cache/rector', FileCacheStorage::class)
     ->withPaths([
         $root . '/rules',
         $root . '/tests',
