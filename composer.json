@@ -21,6 +21,7 @@
         "php": "^8.4",
         "friendsofphp/php-cs-fixer": "^3.88",
         "larastan/larastan": "^3.0",
+        "rector/rector": "^2.4",
         "squizlabs/php_codesniffer": "^4.0"
     },
     "autoload": {
@@ -51,15 +52,19 @@
             "@test:config:stan",
             "@test:config:cs-fix"
         ],
-        "test:config:syntax": "find tests rules -name '.php-cs-fixer.php' | xargs -n1 php -l",
-        "test:config:stan": "phpstan analyse --memory-limit=2G --configuration=tests/phpstan.neon tests/.php-cs-fixer.php rules/.php-cs-fixer.php",
-        "test:config:cs-fix": "php-cs-fixer fix --dry-run --diff --config=tests/.php-cs-fixer.php tests/.php-cs-fixer.php rules/.php-cs-fixer.php",
+        "test:config:syntax": "find tests rules \\( -name '.php-cs-fixer.php' -o -name 'rector.php' \\) | xargs -n1 php -l",
+        "test:config:stan": "phpstan analyse --memory-limit=2G --configuration=tests/phpstan.neon tests/.php-cs-fixer.php rules/.php-cs-fixer.php tests/rector.php rules/rector.php",
+        "test:config:cs-fix": "php-cs-fixer fix --dry-run --diff --config=tests/.php-cs-fixer.php tests/.php-cs-fixer.php rules/.php-cs-fixer.php tests/rector.php rules/rector.php",
+        "test:rector:pass": "rector process --dry-run --config=tests/rector.php tests/rector/pass",
+        "test:rector:fail": "! rector process --dry-run --config=tests/rector.php tests/rector/fail 2>&1",
+        "test:rector": ["@test:rector:pass", "@test:rector:fail"],
         "test": [
             "@test:config",
             "@test:syntax",
             "@test:stan",
             "@test:cs",
-            "@test:cs-fix"
+            "@test:cs-fix",
+            "@test:rector"
         ]
     },
     "minimum-stability": "stable",

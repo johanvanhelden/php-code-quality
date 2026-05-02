@@ -29,7 +29,7 @@ validate-be: code-quality-be code-style-be
 
 code-quality-be: syntax stan
 
-code-style-be: cs cs-fix-dry
+code-style-be: cs cs-fix-dry rector-dry
 
 syntax:
 	$(DOCKER_PHP_EXEC) find . -name "*.php" -not -path "./vendor/*" -not -path "./storage/*" -print0 | xargs -0 -n1 -P8 php -l
@@ -45,3 +45,11 @@ cs-fix:
 
 cs-fix-dry:
 	$(DOCKER_PHP_EXEC) vendor/bin/php-cs-fixer fix --dry-run --diff --config=.php-cs-fixer.php
+
+rector:
+	$(DOCKER_PHP_EXEC) vendor/bin/rector process
+
+rector-dry:
+	$(DOCKER_PHP_EXEC) vendor/bin/rector process --dry-run
+
+fix-be: cs-fix rector

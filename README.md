@@ -7,6 +7,7 @@ This package contains my standardized PHP code quality rules and configurations 
 - **PHP_CodeSniffer (PHPCS)**: `rules/phpcs.xml`
 - **PHP CS Fixer**: `rules/.php-cs-fixer.php`
 - **PHPStan/Larastan**: `rules/phpstan.neon`
+- **Rector**: `rules/rector.php`
 
 ## Usage
 
@@ -91,6 +92,33 @@ Create a `phpcs.xml` file in the root of the project with the following contents
 </ruleset>
 ```
 
+### Rector
+
+Create a `rector.php` file in the root of the project with the following contents:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+$root = __DIR__;
+
+/** @var \Rector\Configuration\RectorConfigBuilder $config */
+$config = include __DIR__ . '/vendor/johanvanhelden/php-code-quality/rules/rector.php';
+
+return $config
+    ->withPaths([
+        $root . '/app',
+        $root . '/bootstrap',
+        $root . '/config',
+        $root . '/database',
+        $root . '/lang',
+        $root . '/public',
+        $root . '/routes',
+        $root . '/tests',
+    ]);
+```
+
 ### Makefile
 
 Include the Makefile in your project's main Makefile:
@@ -106,6 +134,7 @@ To run a collection of tools:
 make validate-be     # Run all quality checks (for CI/CD usage)
 make code-quality-be # Run syntax and static analysis checks
 make code-style-be   # Run code style checks
+make fix-be          # Auto-fix all code style and Rector issues
 ```
 
 Or run each check separately:
@@ -115,6 +144,8 @@ make stan            # Run static analysis
 make cs              # Check code style
 make cs-fix          # Fix code style
 make cs-fix-dry      # Dry run code style fixes (for CI/CD usage)
+make rector          # Run Rector upgrades and refactors
+make rector-dry      # Dry run Rector checks (for CI/CD usage)
 ```
 
 #### Docker
@@ -162,7 +193,10 @@ code-quality:
         run: make cs-fix-dry
 
       - name: Static Code Analysis
-        run: make stan        
+        run: make stan
+
+      - name: Rector
+        run: make rector-dry
 ```
 
 ## Visual Studio Code

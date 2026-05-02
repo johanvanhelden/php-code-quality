@@ -92,13 +92,6 @@ class NoImplicitOperatorInQueryMethodRule implements Rule
     private function shouldIgnoreCaller(Node $node, Scope $scope): bool
     {
         $callerType = $scope->getType($node->var);
-
-        foreach ($callerType->getReferencedClasses() as $referencedClass) {
-            if (in_array($referencedClass, self::IGNORED_CALLER_CLASSES, true)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($callerType->getReferencedClasses(), fn($referencedClass) => in_array($referencedClass, self::IGNORED_CALLER_CLASSES, true));
     }
 }
