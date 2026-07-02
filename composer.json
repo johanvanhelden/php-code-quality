@@ -18,10 +18,10 @@
         }
     ],
     "require": {
-        "php": "^8.4",
-        "friendsofphp/php-cs-fixer": "^3.88",
-        "larastan/larastan": "^3.0",
-        "rector/rector": "^2.4",
+        "php": "^8.5",
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "larastan/larastan": "^3.10",
+        "rector/rector": "^2.5",
         "squizlabs/php_codesniffer": "^4.0"
     },
     "autoload": {
@@ -37,16 +37,28 @@
     "scripts": {
         "test:syntax:pass": "find tests/syntax/pass -name '*.php' -print0 | xargs -0 -n1 -P8 php -l",
         "test:syntax:fail": "! find tests/syntax/fail -name '*.php' -print0 | xargs -0 -n1 -P8 php -l 2>&1",
-        "test:syntax": ["@test:syntax:pass", "@test:syntax:fail"],
+        "test:syntax": [
+            "@test:syntax:pass",
+            "@test:syntax:fail"
+        ],
         "test:stan:pass": "phpstan analyse --memory-limit=2G --configuration=tests/phpstan.neon tests/phpstan/pass -v",
         "test:stan:fail": "! phpstan analyse --memory-limit=2G --configuration=tests/phpstan.neon tests/phpstan/fail -v 2>&1",
-        "test:stan": ["@test:stan:pass", "@test:stan:fail"],
+        "test:stan": [
+            "@test:stan:pass",
+            "@test:stan:fail"
+        ],
         "test:cs:pass": "phpcs --standard=tests/phpcs.xml -ps tests/phpcs/pass",
         "test:cs:fail": "! phpcs --standard=tests/phpcs.xml -ps tests/phpcs/fail 2>&1",
-        "test:cs": ["@test:cs:pass", "@test:cs:fail"],
+        "test:cs": [
+            "@test:cs:pass",
+            "@test:cs:fail"
+        ],
         "test:cs-fix:pass": "php-cs-fixer fix --dry-run --diff --config=tests/.php-cs-fixer.php --path-mode=intersection tests/php-cs-fixer/pass",
         "test:cs-fix:fail": "bash -c 'output=$(php-cs-fixer fix --dry-run --diff --config=tests/.php-cs-fixer.php --path-mode=intersection tests/php-cs-fixer/fail 2>&1); echo \"$output\"; ! echo \"$output\" | grep -q \"Found 0 of\"'",
-        "test:cs-fix": ["@test:cs-fix:pass", "@test:cs-fix:fail"],
+        "test:cs-fix": [
+            "@test:cs-fix:pass",
+            "@test:cs-fix:fail"
+        ],
         "test:config": [
             "@test:config:syntax",
             "@test:config:stan",
@@ -57,7 +69,10 @@
         "test:config:cs-fix": "php-cs-fixer fix --dry-run --diff --config=tests/.php-cs-fixer.php tests/.php-cs-fixer.php rules/.php-cs-fixer.php tests/rector.php rules/rector.php",
         "test:rector:pass": "rector process --dry-run --config=tests/rector.php tests/rector/pass",
         "test:rector:fail": "! rector process --dry-run --config=tests/rector.php tests/rector/fail 2>&1",
-        "test:rector": ["@test:rector:pass", "@test:rector:fail"],
+        "test:rector": [
+            "@test:rector:pass",
+            "@test:rector:fail"
+        ],
         "test": [
             "@test:config",
             "@test:syntax",

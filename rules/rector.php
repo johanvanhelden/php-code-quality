@@ -9,6 +9,7 @@ use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\Php82\Rector\Class_\ReadOnlyClassRector;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
+use Rector\Php85\Rector\Property\AddOverrideAttributeToOverriddenPropertiesRector;
 use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
 
 return RectorConfig::configure()
@@ -20,9 +21,10 @@ return RectorConfig::configure()
         NullToStrictStringFuncCallArgRector::class,
         '*/vendor/*',
     ])
-    ->withPhpSets(php84: true)
+    ->withPhpSets()
     ->withRules([
         DeclareStrictTypesRector::class,
+        AddOverrideAttributeToOverriddenPropertiesRector::class,
     ])
     ->withConfiguredRule(AddOverrideAttributeToOverriddenMethodsRector::class, [
         'allow_override_empty_method' => true,

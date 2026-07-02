@@ -14,6 +14,7 @@ This package contains my standardized PHP code quality rules and configurations 
 ### Installation
 
 Add the repository to your `composer.json`:
+
 ```json
 "repositories": [
     {
@@ -24,6 +25,7 @@ Add the repository to your `composer.json`:
 ```
 
 Then require the package:
+
 ```shell
 composer require --dev johanvanhelden/php-code-quality
 ```
@@ -83,6 +85,7 @@ return $config->setFinder($finder);
 ### PHPCS
 
 Create a `phpcs.xml` file in the root of the project with the following contents:
+
 ```xml
 <?xml version="1.0"?>
 <ruleset name="Application's PHPCS configuration">
@@ -136,6 +139,7 @@ Include the Makefile in your project's main Makefile:
 Or copy the Makefile to your project root and use directly.
 
 To run a collection of tools:
+
 ```bash
 make validate-be     # Run all quality checks (for CI/CD usage)
 make code-quality-be # Run syntax and static analysis checks
@@ -144,6 +148,7 @@ make fix-be          # Auto-fix all code style and Rector issues
 ```
 
 Or run each check separately:
+
 ```
 make syntax          # Check syntax errors
 make stan            # Run static analysis
@@ -155,6 +160,7 @@ make rector-dry      # Dry run Rector checks (for CI/CD usage)
 ```
 
 #### Docker
+
 The Makefile can automatically detect if commands are being executed in Docker or not. The PHP container needs to be called `php`.
 
 The Makefile automatically detects the package directory and references the rule files accordingly.
@@ -169,40 +175,40 @@ code-quality:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+        - uses: actions/checkout@v4
 
-      - name: Set Up PHP and Tools
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.4'
-          tools: composer:v2
-          coverage: none
+        - name: Set Up PHP and Tools
+          uses: shivammathur/setup-php@v2
+          with:
+              php-version: "8.5"
+              tools: composer:v2
+              coverage: none
 
-      - name: Cache Composer Dependencies
-        uses: actions/cache@v3
-        with:
-          path: ./vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
+        - name: Cache Composer Dependencies
+          uses: actions/cache@v3
+          with:
+              path: ./vendor
+              key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+              restore-keys: |
+                  ${{ runner.os }}-composer-
 
-      - name: Install Composer Dependencies
-        run: composer install
+        - name: Install Composer Dependencies
+          run: composer install
 
-      - name: Syntax Errors
-        run: make syntax
+        - name: Syntax Errors
+          run: make syntax
 
-      - name: PHP_CodeSniffer
-        run: make cs
+        - name: PHP_CodeSniffer
+          run: make cs
 
-      - name: PHP-CS-Fixer
-        run: make cs-fix-dry
+        - name: PHP-CS-Fixer
+          run: make cs-fix-dry
 
-      - name: Static Code Analysis
-        run: make stan
+        - name: Static Code Analysis
+          run: make stan
 
-      - name: Rector
-        run: make rector-dry
+        - name: Rector
+          run: make rector-dry
 ```
 
 ## Visual Studio Code
@@ -227,6 +233,7 @@ Set the correct composer version:
 ```
 
 And set up the repository configuration to point to your local package path:
+
 ```json
 "repositories": [
     {
@@ -245,4 +252,3 @@ volumes:
     # Other volumes
     - ../php-code-quality:/var/www/packages/php-code-quality:rw
 ```
-
