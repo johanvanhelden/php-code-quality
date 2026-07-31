@@ -32,7 +32,7 @@ code-quality-be: syntax stan
 code-style-be: cs cs-fix-dry rector-dry
 
 syntax:
-	$(DOCKER_PHP_EXEC) find . -name "*.php" -not -path "./vendor/*" -not -path "./storage/*" -print0 | xargs -0 -n1 -P8 php -l
+	$(DOCKER_PHP_EXEC) sh -c "find . -name '*.php' -not -path './vendor/*' -not -path './storage/*' -print0 | xargs -0 -n1 -P8 php -l"
 
 stan:
 	$(DOCKER_PHP_EXEC) vendor/bin/phpstan analyse --memory-limit=2G --configuration=phpstan.neon -v
