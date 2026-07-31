@@ -252,3 +252,28 @@ volumes:
     # Other volumes
     - ../php-code-quality:/var/www/packages/php-code-quality:rw
 ```
+
+## Developing This Package
+
+This repository ships its own Docker setup so no PHP install is required on the host — the container matches the package's PHP requirement (`^8.5`).
+
+Use `bin/dev` to run any command against the containerized PHP environment. It starts the container on demand and runs commands inside it; if you're already inside the container or running in CI, it runs the command directly instead.
+
+```bash
+bin/dev composer install              # Install dependencies
+bin/dev composer test                 # Run the full test suite (see TESTING.md)
+bin/dev composer test:cs              # Run an individual check
+bin/dev vendor/bin/php-cs-fixer fix   # Auto-fix code style in this repo
+```
+
+To open a shell inside the container:
+
+```bash
+docker compose exec php bash
+```
+
+To stop the container:
+
+```bash
+docker compose down
+```

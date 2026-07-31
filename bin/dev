@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#
+# Run a command against this package's Docker dev environment.
+#
+# Usage:
+#   bin/dev composer install
+#   bin/dev composer test
+#   bin/dev vendor/bin/phpstan analyse
+#
+# If already running inside the container (or in CI where PHP 8.5 is
+# already set up), the command runs directly instead of through Docker.
+
+set -euo pipefail
+
+if [ -f /.dockerenv ] || [ "${CI:-}" = "true" ]; then
+    exec "$@"
+fi
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+docker compose up -d >&2
+
+exec docker compose exec php "$@"
