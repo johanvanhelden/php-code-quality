@@ -69,18 +69,25 @@ return new Config()
         'no_whitespace_in_blank_line'                 => true,
         'normalize_index_brace'                       => true,
         'object_operator_without_whitespace'          => true,
-        'ordered_imports'                             => true,
-        'phpdoc_align'                                => true,
-        'phpdoc_annotation_without_dot'               => true,
-        'phpdoc_indent'                               => true,
-        'phpdoc_no_access'                            => true,
-        'phpdoc_no_alias_tag'                         => true,
-        'phpdoc_no_empty_return'                      => false,
-        'phpdoc_no_package'                           => true,
-        'phpdoc_no_useless_inheritdoc'                => true,
-        'phpdoc_return_self_reference'                => true,
-        'phpdoc_scalar'                               => true,
-        'phpdoc_separation'                           => [
+        'ordered_imports'                             => [
+            'imports_order' => [
+                'class',
+                'function',
+                'const',
+            ],
+            'sort_algorithm' => 'alpha',
+        ],
+        'phpdoc_align'                  => true,
+        'phpdoc_annotation_without_dot' => true,
+        'phpdoc_indent'                 => true,
+        'phpdoc_no_access'              => true,
+        'phpdoc_no_alias_tag'           => true,
+        'phpdoc_no_empty_return'        => false,
+        'phpdoc_no_package'             => true,
+        'phpdoc_no_useless_inheritdoc'  => true,
+        'phpdoc_return_self_reference'  => true,
+        'phpdoc_scalar'                 => true,
+        'phpdoc_separation'             => [
             'groups' => [
                 // general
                 [
