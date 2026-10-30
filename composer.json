@@ -22,6 +22,7 @@
         "friendsofphp/php-cs-fixer": "^3.95",
         "larastan/larastan": "^3.10",
         "rector/rector": "^2.5",
+        "spaze/phpstan-disallowed-calls": "^4.15",
         "squizlabs/php_codesniffer": "^4.0"
     },
     "autoload": {
@@ -43,17 +44,28 @@
         ],
         "test:stan:pass": "phpstan analyse --memory-limit=2G --configuration=tests/phpstan.neon tests/phpstan/pass -v",
         "test:stan:fail": "! phpstan analyse --memory-limit=2G --configuration=tests/phpstan.neon tests/phpstan/fail -v 2>&1",
+        "test:stan:disallowed:pass": "cd tests/disallowed && ../../vendor/bin/phpstan analyse --memory-limit=2G --configuration=phpstan.neon app/Pass app/Helpers app/EnvFail -v",
+        "test:stan:disallowed:fail": "tests/disallowed/assert-errors.sh phpstan.neon app/Fail 'remove debugging calls' 3",
+        "test:stan:disallowed:environment:pass": "cd tests/disallowed && ../../vendor/bin/phpstan analyse --memory-limit=2G --configuration=phpstan-environment.neon app/Pass app/Helpers app/EnvPass -v",
+        "test:stan:disallowed:environment:fail": "tests/disallowed/assert-errors.sh phpstan-environment.neon app/EnvFail 'Use App\\Helpers\\Environment' 10",
+        "test:stan:disallowed": [
+            "@test:stan:disallowed:pass",
+            "@test:stan:disallowed:fail",
+            "@test:stan:disallowed:environment:pass",
+            "@test:stan:disallowed:environment:fail"
+        ],
         "test:stan": [
             "@test:stan:pass",
-            "@test:stan:fail"
+            "@test:stan:fail",
+            "@test:stan:disallowed"
         ],
-        "test:cs:pass": "phpcs --standard=tests/phpcs.xml -ps tests/phpcs/pass",
+        "test:cs:pass": "phpcs --standard=tests/phpcs.xml -ps tests/phpcs/pass tests/disallowed",
         "test:cs:fail": "! phpcs --standard=tests/phpcs.xml -ps tests/phpcs/fail 2>&1",
         "test:cs": [
             "@test:cs:pass",
             "@test:cs:fail"
         ],
-        "test:cs-fix:pass": "php-cs-fixer fix --dry-run --diff --config=tests/.php-cs-fixer.php --path-mode=intersection tests/php-cs-fixer/pass",
+        "test:cs-fix:pass": "php-cs-fixer fix --dry-run --diff --config=tests/.php-cs-fixer.php --path-mode=intersection tests/php-cs-fixer/pass tests/disallowed",
         "test:cs-fix:fail": "bash -c 'output=$(php-cs-fixer fix --dry-run --diff --config=tests/.php-cs-fixer.php --path-mode=intersection tests/php-cs-fixer/fail 2>&1); echo \"$output\"; ! echo \"$output\" | grep -q \"Found 0 of\"'",
         "test:cs-fix": [
             "@test:cs-fix:pass",

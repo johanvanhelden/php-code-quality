@@ -1,0 +1,12 @@
+# App-agnostic "disallowed calls" (spaze/phpstan-disallowed-calls), always on.
+#
+# If you add `allowIn` paths: they are resolved against the working directory
+# PHPStan is run from, not against this file, so use %currentWorkingDirectory%.
+parameters:
+    disallowedFunctionCalls:
+        -
+            function:
+                - 'dd()'
+                - 'dump()'
+                - 'var_dump()'
+            message: 'remove debugging calls'

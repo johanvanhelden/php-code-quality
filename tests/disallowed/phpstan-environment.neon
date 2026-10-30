@@ -1,0 +1,3 @@
+includes:
+    - phpstan.neon
+    - ../../rules/disallowed/environment.neon

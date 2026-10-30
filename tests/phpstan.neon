@@ -1,5 +1,7 @@
 includes:
+    - %rootDir%/../../../vendor/spaze/phpstan-disallowed-calls/extension.neon
     - ../rules/phpstan.neon
+    - ../rules/disallowed.neon
 
 parameters:
     paths:
