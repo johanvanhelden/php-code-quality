@@ -7,6 +7,7 @@ This package contains my standardized PHP code quality rules and configurations 
 - **PHP_CodeSniffer (PHPCS)**: `rules/phpcs.xml`
 - **PHP CS Fixer**: `rules/.php-cs-fixer.php`
 - **PHPStan/Larastan**: `rules/phpstan.neon`
+- **Disallowed calls** (`spaze/phpstan-disallowed-calls`): `rules/disallowed.neon` (always on) and `rules/disallowed/*.neon` (opt-in)
 - **Rector**: `rules/rector.php`
 
 ## Usage
@@ -42,6 +43,62 @@ parameters:
     ignoreErrors:
         - '#Any custom errors to ignore here#'
 ```
+
+#### Disallowed calls
+
+The package ships [spaze/phpstan-disallowed-calls](https://github.com/spaze/phpstan-disallowed-calls) and loads it through `rules/larastan.neon`, so every app that includes that file gets these rules:
+
+- `dd()`, `dump()` and `var_dump()` are disallowed ("remove debugging calls")
+
+`allowIn` paths (used by the opt-in file below and by your own rules) are resolved against the directory PHPStan is run from (not against the neon file), so use `%currentWorkingDirectory%`. Run PHPStan from the project root (as `make stan` does).
+
+##### Opt-in: only check the environment through `App\Helpers\Environment`
+
+For apps with the convention of checking the environment only through the class `App\Helpers\Environment` (`isProduction()`, `isLocal()`, `isTesting()`, `isDevelopment()`), add this line to the app's `phpstan.neon`:
+
+```
+includes:
+    - ./vendor/johanvanhelden/php-code-quality/rules/larastan.neon
+    - ./vendor/johanvanhelden/php-code-quality/rules/disallowed/environment.neon
+```
+
+It disallows `Illuminate\Support\Facades\App::environment()/isLocal()/isProduction()`, `Illuminate\Foundation\Application::environment()/isLocal()/isProduction()` and `Illuminate\Contracts\Foundation\Application::environment()`, except in `app/Helpers/Environment.php`.
+
+What is caught (verified by the fixtures in `tests/disallowed/app/EnvFail`):
+
+- `App::environment()` / `App::isProduction()` / `App::isLocal()` using the Laravel facade
+- the same static calls through a subclass facade such as `App\Helpers\App extends Illuminate\Support\Facades\App` (reported as `... (as App\Helpers\App::environment())`)
+- `app()->environment()`, `$app->isProduction()` on an `Illuminate\Foundation\Application` instance
+- `$this->app->environment()` in a service provider (typed as the `Illuminate\Contracts\Foundation\Application` contract)
+
+Not caught: `Illuminate\Support\Facades\App::currentEnvironmentIs()` and anything whose type PHPStan cannot infer (`mixed`). The `app()` helper is only caught when PHPStan resolves it to the `Application` class (Larastan does).
+
+##### Adding your own rules in an app
+
+Add the spaze parameters to the app's own `phpstan.neon`. Entries are merged with the ones from this package:
+
+```
+includes:
+    - ./vendor/johanvanhelden/php-code-quality/rules/larastan.neon
+
+parameters:
+    disallowedFunctionCalls:
+        -
+            function: 'now()'
+            message: 'Use Illuminate\Support\Facades\Date::now() instead'
+    disallowedStaticCalls:
+        -
+            method: 'Illuminate\Support\Facades\DB::statement()'
+            message: 'Use the query builder instead'
+            allowIn:
+                - %currentWorkingDirectory%/database/*
+    disallowedMethodCalls:
+        -
+            method: 'Illuminate\Http\Request::all()'
+            message: 'Use validated() or only() instead'
+```
+
+See the [spaze documentation](https://github.com/spaze/phpstan-disallowed-calls) for all options. Use `%currentWorkingDirectory%/...` for `allowIn` paths.
 
 ### PHP-CS-Fixer
 

@@ -1,3 +1,5 @@
 includes:
     - %rootDir%/../../../vendor/larastan/larastan/extension.neon
+    - %rootDir%/../../../vendor/spaze/phpstan-disallowed-calls/extension.neon
     - phpstan.neon
+    - disallowed.neon

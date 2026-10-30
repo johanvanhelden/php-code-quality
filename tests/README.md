@@ -10,6 +10,7 @@ tests/
 ├── syntax/fail/          # Invalid syntax (missing braces)
 ├── phpstan/pass/         # Type-safe code
 ├── phpstan/fail/         # Type violations
+├── disallowed/           # Mini app root for the disallowed-calls rules (see TESTING.md)
 ├── phpcs/pass/           # PSR-12 compliant
 ├── phpcs/fail/           # PSR-12 violations
 ├── php-cs-fixer/pass/    # Fixer compliant
@@ -32,7 +33,8 @@ composer test:config:cs-fix   # PHP-CS-Fixer
 
 # Tool tests
 composer test:syntax          # Syntax checker
-composer test:stan            # PHPStan
+composer test:stan            # PHPStan (incl. disallowed calls)
+composer test:stan:disallowed # Only the disallowed-calls tests
 composer test:cs              # PHPCS
 composer test:cs-fix          # PHP-CS-Fixer
 ```
@@ -44,6 +46,8 @@ Each tool has both pass and fail test files:
 - Fail files contain invalid code that should be rejected
 
 The `:fail` tests use inverted logic - they pass when the tool correctly detects errors.
+
+The disallowed-calls fail tests (`tests/disallowed/assert-errors.sh`) additionally assert the specific message and count, and that no other errors occur. See `TESTING.md` for details.
 
 ## Adding Tests
 

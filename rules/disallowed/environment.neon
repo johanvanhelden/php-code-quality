@@ -1,0 +1,28 @@
+# Opt-in: for apps that only check the environment through App\Helpers\Environment.
+#
+# Include it from the app's phpstan.neon:
+#     - ./vendor/johanvanhelden/php-code-quality/rules/disallowed/environment.neon
+#
+# `allowIn` uses %currentWorkingDirectory% (PHPStan resolves relative paths against
+# the working directory, not this file), so run PHPStan from the app root.
+parameters:
+    disallowedStaticCalls:
+        -
+            method:
+                - 'Illuminate\Support\Facades\App::environment()'
+                - 'Illuminate\Support\Facades\App::isLocal()'
+                - 'Illuminate\Support\Facades\App::isProduction()'
+            message: 'Use App\Helpers\Environment (isProduction/isLocal/isTesting/isDevelopment) instead of checking the environment directly'
+            allowIn:
+                - %currentWorkingDirectory%/app/Helpers/Environment.php
+
+    disallowedMethodCalls:
+        -
+            method:
+                - 'Illuminate\Foundation\Application::environment()'
+                - 'Illuminate\Foundation\Application::isLocal()'
+                - 'Illuminate\Foundation\Application::isProduction()'
+                - 'Illuminate\Contracts\Foundation\Application::environment()'
+            message: 'Use App\Helpers\Environment (isProduction/isLocal/isTesting/isDevelopment) instead of checking the environment directly'
+            allowIn:
+                - %currentWorkingDirectory%/app/Helpers/Environment.php
